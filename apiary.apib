@@ -59,7 +59,7 @@ Obter uma lista dos catálogos disponíveis para o usuário.
     + Body
     
             {
-                "query" "{ catalogos { _id nome }"
+                "query": "{ catalogos { _id nome }"
             }
         
 + Response 200 (application/json)
@@ -109,7 +109,7 @@ Obter uma lista dos segmentos disponíveis no catálogo.
     + Body
     
             {
-                "query" "{ segmentos(catalogo: \"525e13a2-9696-420e-a0d7-51bedecfecaa\") { _id nome produtos { _id } } }"
+                "query": "{ segmentos(catalogo: \"525e13a2-9696-420e-a0d7-51bedecfecaa\") { _id nome produtos { _id } } }"
             }
         
 + Response 200 (application/json)
@@ -187,7 +187,7 @@ Obter uma lista dos produtos disponíveis no segmento.
     + Body
     
             {
-                "query" "{ produtos(segmento: \"d5986e1f-4ace-4fee-a392-0be79c59359b\") { _id nome descricao permiteAtivacaoFisica permiteAtivacaoVirtual variacao { _id nome codigoUPC valorFace } }"
+                "query": "{ produtos(segmento: \"d5986e1f-4ace-4fee-a392-0be79c59359b\") { _id nome descricao permiteAtivacaoFisica permiteAtivacaoVirtual variacao { _id nome codigoUPC valorFace } }"
             }
         
 + Response 200 (application/json)
@@ -240,5 +240,105 @@ Obter uma lista dos produtos disponíveis no segmento.
                             ]
                         },
                     ]
+                }
+            }
+            
+## Criar Ordem [/integracao{?criar_ordem}]
+
+Criar uma nova ordem de ativação.
+
+**Request Body**
+```
+mutation {
+    criarOrdem(
+        input: {
+            canal: "site"
+            email: "cliente.final@email.com"
+            celular: "+55011912345678"
+            produtos: [
+                {
+                    _id: "de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406",
+                    codigoUPC: "799366153351",
+                    codigoSerial: "8953418657",
+                    codigoBarras: "799366461600006374793695421177",
+                    valor: 100.00
+                },
+                {
+                    _id: "de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406",
+                    codigoUPC: "799366153351",
+                    codigoSerial: "8953418658",
+                    codigoBarras: "799366461600006374793695432288",
+                    valor: 100.00
+                }
+            ]
+        }
+    )
+    {
+        ordem {
+            _id
+            canal
+            email
+            celular
+            status
+            produtos {
+                _id
+                codigoUPC
+                codigoSerial
+                codigoBarras
+                valor
+                status
+            }
+        }
+    }
+}
+```
+
+### criarOrdem(input: params) [POST]
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Bearer seu_token_de_acesso_pessoal
+        
+    + Body
+    
+            {
+                "query": "mutation { criarOrdem( input: { canal: \"site\" email: \"cliente.final@email.com\" celular: \"+55011912345678\" produtos: [ { _id: \"de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406\", codigoUPC: \"799366153351\", codigoSerial: \"8953418657\", codigoBarras: \"799366461600006374793695421177\", valor: 100.00 }, { _id: \"de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406\", codigoUPC: \"799366153351\", codigoSerial: \"8953418658\", codigoBarras: \"799366461600006374793695432288\", valor: 100.00 } ] } ) { ordem { _id canal email celular status produtos { _id codigoUPC codigoSerial codigoBarras valor status } } } }"
+            }
+        
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "data": {
+                    "criarOrdem": {
+                        "ordem": {
+                            "_id": "e4c8c6b1-f771-4761-94a9-516aa42b52fb",
+                            canal: "site",
+                            email: "cliente.final@email.com",
+                            celular: "+55011912345678",
+                            "status": "Em Processamento",
+                            "produtos: [
+                                {
+                                    "_id": "de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406",
+                                    "codigoUPC": "799366153351",
+                                    "codigoSerial": "8953418657",
+                                    "codigoBarras": "799366461600006374793695421177",
+                                    "valor": 100.00,
+                                    "status": "Em Processamento",
+                                },
+                                {
+                                    "_id": "de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406",
+                                    "codigoUPC": "799366153351",
+                                    "codigoSerial": "8953418658",
+                                    "codigoBarras": "799366461600006374793695432288",
+                                    "valor": 100.00,
+                                    "status": "Em Processamento",
+                                }
+                            ]
+                        }
+                    }
                 }
             }
