@@ -1,0 +1,244 @@
+FORMAT: 1A
+HOST: http://api.enjoyin.com.br
+
+# API Enjoy In - Integração
+
+Esta é a documentação da API de Integração da plataforma Enjoy In com sistemas de parceiros e clientes.
+
+
+# GraphQL
+
+GraphQL é um linguagem de consulta para APIs criada pelo Facebook em 2012.
+
+**Referências**:
+* [facebook.github.io/graphql](http://facebook.github.io/graphql/)
+* [graphql.org](http://graphql.org/)
+
+Funcionalidades:
+* Envie uma consulta GraphQL para a API e obtenha exatamente o que precisa, nada mais e nada menos. As consultas GraphQL sempre retornarão dados dentro do especificado pela chamada. 
+* As consultas GraphQL não acessam apenas as propriedades de um único recurso, mas sim permitem seguir as referências entre diversos.
+
+# Autenticação (OAuth / JWT)
+
+As requisições dessa API exigirão um Token OAuth, que deverá ser enviado no header da requisição.
+
+O **token de acesso pessoal** poderá ser solicitado para seu representante na Enjoy In.
+
+| Header            | Valor                                 |
+|-------------------|---------------------------------------|
+| **Content-Type**  | _application/json_                    |
+| **Authorization** | _Bearer <seu_token_de_acesso_pessoal>_ |
+
+**Referências**:
+* [OAuth 2](https://oauth.net/2/)
+* [JWT](https://jwt.io/introduction/)
+
+
+## Listar Catálogos [/integracao{?catalogos}]
+
+Obter uma lista dos catálogos disponíveis para o usuário.
+
+**Request Body**
+```
+{
+    catalogos {
+        _id
+        nome
+    }
+}
+```
+
+### catalogos [POST]
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Bearer seu_token_de_acesso_pessoal
+        
+    + Body
+    
+            {
+                "query" "{ catalogos { _id nome }"
+            }
+        
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "data": {
+                    "catalogos": [
+                        {
+                            "_id": "525e13a2-9696-420e-a0d7-51bedecfecaa",
+                            "nome": "Catálogo 1",
+                        },
+                        {
+                            "_id": "29daf0bd-63fa-4ca0-a30a-02ce0b461fd4",
+                            "nome": "Catálogo 2",
+                        }
+                    ]
+                }
+            }
+
+## Listar Segmentos [/integracao{?segmentos}]
+
+Obter uma lista dos segmentos disponíveis no catálogo.
+
+**Request Body**
+```
+{
+    segmentos(catalogo: "525e13a2-9696-420e-a0d7-51bedecfecaa") {
+        _id
+        nome
+        produtos {
+            _id
+        }
+    }
+}
+```
+
+### segmentos(catalogo: [id_catalogo]) [POST]
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Bearer seu_token_de_acesso_pessoal
+        
+    + Body
+    
+            {
+                "query" "{ segmentos(catalogo: \"525e13a2-9696-420e-a0d7-51bedecfecaa\") { _id nome produtos { _id } } }"
+            }
+        
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "data": {
+                    "segmentos": [
+                        {
+                            "_id": "d15ed8f4-677e-4da3-87fd-65e70d8c22f2",
+                            "nome": "Entretenimento",
+                            "produtos": [
+                                {
+                                    "_id": "d3680ae8-1203-442c-b6be-34b3b1b61f5b",
+                                },
+                                {
+                                    "_id": "5df4a3d1-0229-4c00-9837-7b28a8529bbe",
+                                },
+                                {
+                                    "_id": "29e76ffe-eb27-4207-ba6d-b41d21d45b5c",
+                                },
+                            ]
+                        },
+                        {
+                            "_id": "d5986e1f-4ace-4fee-a392-0be79c59359b",
+                            "nome": "Games",
+                            "produtos": [
+                                {
+                                    "_id": "0b3a001e-3b13-460c-9541-c32cd9845b6b",
+                                },
+                                {
+                                    "_id": "b47529c3-45d1-44ce-94e6-273045051469",
+                                },
+                                {
+                                    "_id": "849fd940-c4bf-4b21-80a5-eae3412409ab",
+                                },
+                            ]
+                        }
+                    ]
+                }
+            }
+
+## Listar Produtos [/integracao{?produtos}]
+
+Obter uma lista dos produtos disponíveis no segmento.
+
+**Request Body**
+```
+{
+    produtos(segmento: "d5986e1f-4ace-4fee-a392-0be79c59359b") {
+        _id
+        nome
+        descricao
+        permiteAtivacaoFisica
+        permiteAtivacaoVirtual
+        variacao {
+            _id
+            nome
+            codigoUPC
+            valorFace
+        }
+    }
+}
+```
+
+### produtos(segmento: [id_segmento]) [POST]
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Bearer seu_token_de_acesso_pessoal
+        
+    + Body
+    
+            {
+                "query" "{ produtos(segmento: \"d5986e1f-4ace-4fee-a392-0be79c59359b\") { _id nome descricao permiteAtivacaoFisica permiteAtivacaoVirtual variacao { _id nome codigoUPC valorFace } }"
+            }
+        
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "data": {
+                    "produtos": [
+                        {
+                            "_id": "0b3a001e-3b13-460c-9541-c32cd9845b6b",
+                            "nome": "Sony PlayStation",
+                            "descricao": "O Cartão Psn É Indispensável Para Adquirir Produtos E Conteúdos Exclusivos Da Playstation®Store (Loja Online Do Playstation).",
+                            "permiteAtivacaoFisica": false,
+                            "permiteAtivacaoVirtual": true,
+                            "variacao": [
+                                {
+                                    "_id": "de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406",
+                                    "nome": "Sony PlayStation R$ 100,00",
+                                    "codigoUPC": "799366153351",
+                                    "valorFace": 100.00,
+                                },
+                                {
+                                    "_id": "e3baa7b4-158e-49d7-a77d-49c82c81baac",
+                                    "nome": "Sony PlayStation R$ 250,00",
+                                    "codigoUPC": "799366153368",
+                                    "valorFace": 250.00,
+                                },
+                            ]
+                        },
+                        {
+                            "_id": "b47529c3-45d1-44ce-94e6-273045051469",
+                            "nome": "Riot League of Legends",
+                            "descricao": "Um jogo ambientado em um mundo de fantasia, batalhas sangrentas e muita magia, esse é o League of Legends (LoL).",
+                            "permiteAtivacaoFisica": false,
+                            "permiteAtivacaoVirtual": true,
+                            "variacao": [
+                                {
+                                    "_id": "534aa44d-8d63-488e-9cc4-f5ffd25710e0",
+                                    "nome": "Riot League of Legends R$ 50,00",
+                                    "codigoUPC": "799366422143",
+                                    "valorFace": 50.00,
+                                },
+                                {
+                                    "_id": "03d9e975-0729-4469-9f64-b1d0d1a829ff",
+                                    "nome": "Riot League of Legends R$ 100,00",
+                                    "codigoUPC": "799366422150",
+                                    "valorFace": 100.00,
+                                },
+                            ]
+                        },
+                    ]
+                }
+            }
