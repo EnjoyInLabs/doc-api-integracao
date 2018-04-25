@@ -15,7 +15,7 @@ GraphQL é um linguagem de consulta para APIs criada pelo Facebook em 2012.
 * [graphql.org](http://graphql.org/)
 
 Funcionalidades:
-* Envie uma consulta GraphQL para a API e obtenha exatamente o que precisa, nada mais e nada menos. As consultas GraphQL sempre retornarão dados dentro do especificado pela chamada. 
+* Envie uma consulta GraphQL para a API e obtenha exatamente o que precisa, nada mais e nada menos. As consultas GraphQL sempre retornarão dados dentro do especificado pela chamada.
 * As consultas GraphQL não acessam apenas as propriedades de um único recurso, mas sim permitem seguir as referências e relacionamentos de nosso modelo de dados.
 
 # Autenticação (OAuth / JWT)
@@ -53,28 +53,28 @@ Obter uma lista dos catálogos disponíveis para o usuário.
 + Request (application/json)
 
     + Headers
-    
+
             Authorization: Bearer seu_token_de_acesso_pessoal
-        
+
     + Body
-    
+
             {
                 "query": "{ catalogos { _id nome }"
             }
-        
+
 + Response 200 (application/json)
 
     + Body
-    
+
             {
                 "data": {
                     "catalogos": [
                         {
-                            "_id": "525e13a2-9696-420e-a0d7-51bedecfecaa",
+                            "_id": "5adfc52a44b13180a54dba76",
                             "nome": "Catálogo 1",
                         },
                         {
-                            "_id": "29daf0bd-63fa-4ca0-a30a-02ce0b461fd4",
+                            "_id": "5adfc52a44b13180a54dba77",
                             "nome": "Catálogo 2",
                         }
                     ]
@@ -88,7 +88,7 @@ Obter uma lista dos segmentos disponíveis no catálogo.
 **Request Body**
 ```
 {
-    segmentos(catalogo: "525e13a2-9696-420e-a0d7-51bedecfecaa") {
+    segmentos(catalogo: "5adfc52a44b13180a54dba76") {
         _id
         nome
         produtos {
@@ -103,19 +103,19 @@ Obter uma lista dos segmentos disponíveis no catálogo.
 + Request (application/json)
 
     + Headers
-    
+
             Authorization: Bearer seu_token_de_acesso_pessoal
-        
+
     + Body
-    
+
             {
-                "query": "{ segmentos(catalogo: \"525e13a2-9696-420e-a0d7-51bedecfecaa\") { _id nome produtos { _id } } }"
+                "query": "{ segmentos(catalogo: \"5adfc52a44b13180a54dba76\") { _id nome produtos { _id } } }"
             }
-        
+
 + Response 200 (application/json)
 
     + Body
-    
+
             {
                 "data": {
                     "segmentos": [
@@ -181,19 +181,19 @@ Obter uma lista dos produtos disponíveis no segmento.
 + Request (application/json)
 
     + Headers
-    
+
             Authorization: Bearer seu_token_de_acesso_pessoal
-        
+
     + Body
-    
+
             {
                 "query": "{ produtos(segmento: \"d5986e1f-4ace-4fee-a392-0be79c59359b\") { _id nome descricao permiteAtivacaoFisica permiteAtivacaoVirtual variacao { _id nome codigoUPC valorFace } }"
             }
-        
+
 + Response 200 (application/json)
 
     + Body
-    
+
             {
                 "data": {
                     "produtos": [
@@ -242,7 +242,7 @@ Obter uma lista dos produtos disponíveis no segmento.
                     ]
                 }
             }
-            
+
 ## Criar Ordem [/integracao{?criar_ordem}]
 
 Criar uma nova ordem de ativação.
@@ -298,19 +298,19 @@ mutation {
 + Request (application/json)
 
     + Headers
-    
+
             Authorization: Bearer seu_token_de_acesso_pessoal
-        
+
     + Body
-    
+
             {
                 "query": "mutation { criarOrdem( input: { canal: \"site\" email: \"cliente.final@email.com\" celular: \"+55011912345678\" produtos: [ { _id: \"de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406\", codigoUPC: \"799366153351\", codigoSerial: \"8953418657\", codigoBarras: \"799366461600006374793695421177\", valor: 100.00 }, { _id: \"de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406\", codigoUPC: \"799366153351\", codigoSerial: \"8953418658\", codigoBarras: \"799366461600006374793695432288\", valor: 100.00 } ] } ) { ordem { _id canal email celular status produtos { _id codigoUPC codigoSerial codigoBarras valor status } } } }"
             }
-        
+
 + Response 200 (application/json)
 
     + Body
-    
+
             {
                 "data": {
                     "criarOrdem": {
@@ -365,19 +365,19 @@ Obter uma lista das ordens criadas.
 + Request (application/json)
 
     + Headers
-    
+
             Authorization: Bearer seu_token_de_acesso_pessoal
-        
+
     + Body
-    
+
             {
                 "query": "{ ordens { _id canal email celular status } }"
             }
-        
+
 + Response 200 (application/json)
 
     + Body
-    
+
             {
                 "data": {
                     "ordens": [
@@ -422,19 +422,19 @@ Obter uma ordem pelo seu identificador.
 + Request (application/json)
 
     + Headers
-    
+
             Authorization: Bearer seu_token_de_acesso_pessoal
-        
+
     + Body
-    
+
             {
                 "query": "{ ordem(id: \"e4c8c6b1-f771-4761-94a9-516aa42b52fb\") { _id canal email celular status produtos { _id codigoUPC codigoSerial codigoBarras valor status } } }"
             }
-        
+
 + Response 200 (application/json)
 
     + Body
-    
+
             {
                 "data": {
                     "ordem": {
