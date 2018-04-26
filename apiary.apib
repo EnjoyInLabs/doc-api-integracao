@@ -88,8 +88,9 @@ Obter uma lista dos segmentos disponíveis no catálogo.
 **Request Body**
 ```
 {
-    segmentos(catalogo: "5adfc52a44b13180a54dba76") {
+    segmentos(filter: {catalogo: {EQ: "5adfc52a44b13180a54dba76"}}) {
         _id
+        catalogo
         nome
         produtos {
             _id
@@ -109,7 +110,7 @@ Obter uma lista dos segmentos disponíveis no catálogo.
     + Body
 
             {
-                "query": "{ segmentos(catalogo: \"5adfc52a44b13180a54dba76\") { _id nome produtos { _id } } }"
+                "query": "{ segmentos(filter: {catalogo: {EQ: \"5adfc52a44b13180a54dba76\"}}) { _id catalogo nome produtos { _id } } }"
             }
 
 + Response 200 (application/json)
@@ -121,6 +122,7 @@ Obter uma lista dos segmentos disponíveis no catálogo.
                     "segmentos": [
                         {
                             "_id": "d15ed8f4-677e-4da3-87fd-65e70d8c22f2",
+                            "catalogo": "5adfc52a44b13180a54dba76",
                             "nome": "Entretenimento",
                             "produtos": [
                                 {
@@ -136,6 +138,7 @@ Obter uma lista dos segmentos disponíveis no catálogo.
                         },
                         {
                             "_id": "d5986e1f-4ace-4fee-a392-0be79c59359b",
+                            "catalogo": "5adfc52a44b13180a54dba76",
                             "nome": "Games",
                             "produtos": [
                                 {
@@ -160,8 +163,10 @@ Obter uma lista dos produtos disponíveis no segmento.
 **Request Body**
 ```
 {
-    produtos(segmento: "d5986e1f-4ace-4fee-a392-0be79c59359b") {
+    produtos(filter: {segmento: {EQ: "d5986e1f-4ace-4fee-a392-0be79c59359b"}}) {
         _id
+        catalogo
+        segmento
         nome
         descricao
         permiteAtivacaoFisica
@@ -187,7 +192,7 @@ Obter uma lista dos produtos disponíveis no segmento.
     + Body
 
             {
-                "query": "{ produtos(segmento: \"d5986e1f-4ace-4fee-a392-0be79c59359b\") { _id nome descricao permiteAtivacaoFisica permiteAtivacaoVirtual variacao { _id nome codigoUPC valorFace } }"
+                "query": "{ produtos(filter: {segmento: {EQ: \"d5986e1f-4ace-4fee-a392-0be79c59359b\"}}) { _id catalogo segmento nome descricao permiteAtivacaoFisica permiteAtivacaoVirtual variacao { _id nome codigoUPC valorFace } } }"
             }
 
 + Response 200 (application/json)
@@ -199,6 +204,8 @@ Obter uma lista dos produtos disponíveis no segmento.
                     "produtos": [
                         {
                             "_id": "0b3a001e-3b13-460c-9541-c32cd9845b6b",
+                            "catalogo": "5adfc52a44b13180a54dba76",
+                            "segmento": "d5986e1f-4ace-4fee-a392-0be79c59359b",
                             "nome": "Sony PlayStation",
                             "descricao": "O Cartão Psn É Indispensável Para Adquirir Produtos E Conteúdos Exclusivos Da Playstation®Store (Loja Online Do Playstation).",
                             "permiteAtivacaoFisica": false,
@@ -220,6 +227,8 @@ Obter uma lista dos produtos disponíveis no segmento.
                         },
                         {
                             "_id": "b47529c3-45d1-44ce-94e6-273045051469",
+                            "catalogo": "5adfc52a44b13180a54dba76",
+                            "segmento": "d5986e1f-4ace-4fee-a392-0be79c59359b",
                             "nome": "Riot League of Legends",
                             "descricao": "Um jogo ambientado em um mundo de fantasia, batalhas sangrentas e muita magia, esse é o League of Legends (LoL).",
                             "permiteAtivacaoFisica": false,
@@ -243,106 +252,6 @@ Obter uma lista dos produtos disponíveis no segmento.
                 }
             }
 
-## Criar Ordem [/integracao{?criar_ordem}]
-
-Criar uma nova ordem de ativação.
-
-**Request Body**
-```
-mutation {
-    criarOrdem(
-        input: {
-            canal: "site"
-            email: "cliente.final@email.com"
-            celular: "+55011912345678"
-            produtos: [
-                {
-                    _id: "de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406",
-                    codigoUPC: "799366153351",
-                    codigoSerial: "8953418657",
-                    codigoBarras: "799366461600006374793695421177",
-                    valor: 100.00
-                },
-                {
-                    _id: "de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406",
-                    codigoUPC: "799366153351",
-                    codigoSerial: "8953418658",
-                    codigoBarras: "799366461600006374793695432288",
-                    valor: 100.00
-                }
-            ]
-        }
-    )
-    {
-        ordem {
-            _id
-            canal
-            email
-            celular
-            status
-            produtos {
-                _id
-                codigoUPC
-                codigoSerial
-                codigoBarras
-                valor
-                status
-            }
-        }
-    }
-}
-```
-
-### criarOrdem(input: params) [POST]
-
-+ Request (application/json)
-
-    + Headers
-
-            Authorization: Bearer seu_token_de_acesso_pessoal
-
-    + Body
-
-            {
-                "query": "mutation { criarOrdem( input: { canal: \"site\" email: \"cliente.final@email.com\" celular: \"+55011912345678\" produtos: [ { _id: \"de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406\", codigoUPC: \"799366153351\", codigoSerial: \"8953418657\", codigoBarras: \"799366461600006374793695421177\", valor: 100.00 }, { _id: \"de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406\", codigoUPC: \"799366153351\", codigoSerial: \"8953418658\", codigoBarras: \"799366461600006374793695432288\", valor: 100.00 } ] } ) { ordem { _id canal email celular status produtos { _id codigoUPC codigoSerial codigoBarras valor status } } } }"
-            }
-
-+ Response 200 (application/json)
-
-    + Body
-
-            {
-                "data": {
-                    "criarOrdem": {
-                        "ordem": {
-                            "_id": "e4c8c6b1-f771-4761-94a9-516aa42b52fb",
-                            "canal": "site",
-                            "email": "cliente.final@email.com",
-                            "celular": "+55011912345678",
-                            "status": "Em Processamento",
-                            "produtos": [
-                                {
-                                    "_id": "de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406",
-                                    "codigoUPC": "799366153351",
-                                    "codigoSerial": "8953418657",
-                                    "codigoBarras": "799366461600006374793695421177",
-                                    "valor": 100.00,
-                                    "status": "Em Processamento",
-                                },
-                                {
-                                    "_id": "de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406",
-                                    "codigoUPC": "799366153351",
-                                    "codigoSerial": "8953418658",
-                                    "codigoBarras": "799366461600006374793695432288",
-                                    "valor": 100.00,
-                                    "status": "Em Processamento",
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-
 ## Listar Ordens [/integracao{?ordens}]
 
 Obter uma lista das ordens criadas.
@@ -353,9 +262,19 @@ Obter uma lista das ordens criadas.
     ordens {
         _id
         canal
+        nome
         email
         celular
         status
+        itens {
+          _id
+          nome
+          codigoUPC
+          codigoSerial
+          codigoBarras
+          valor
+          status
+        }
     }
 }
 ```
@@ -371,7 +290,7 @@ Obter uma lista das ordens criadas.
     + Body
 
             {
-                "query": "{ ordens { _id canal email celular status } }"
+                "query": "{ ordens { _id canal nome email celular status itens { _id nome codigoUPC codigoSerial codigoBarras valor status } } }"
             }
 
 + Response 200 (application/json)
@@ -384,28 +303,74 @@ Obter uma lista das ordens criadas.
                         {
                             "_id": "e4c8c6b1-f771-4761-94a9-516aa42b52fb",
                             "canal": "site",
+                            "nome": "Nome do Consumidor",
                             "email": "cliente.final@email.com",
                             "celular": "+55011912345678",
                             "status": "Em Processamento",
+                            "itens": [
+                            {
+                                "_id": "de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406",
+                                "nome": "Sony PlayStation R$ 100,00",
+                                "codigoUPC": "799366153351",
+                                "codigoSerial": "8953418657",
+                                "codigoBarras": "799366461600006374793695421177",
+                                "valor": 100,
+                                "status": "EmProcessamento"
+                            },
+                            {
+                                "_id": "de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406",
+                                "nome": "Sony PlayStation R$ 100,00",
+                                "codigoUPC": "799366153351",
+                                "codigoSerial": "8953418658",
+                                "codigoBarras": "799366461600006374793695432288",
+                                "valor": 100,
+                                "status": "EmProcessamento"
+                            }
+                          ]
                         },
                     ]
                 }
             }
 
-## Exibir Ordem [/integracao{?ordem}]
+## Criar Ordem [/integracao{?criar_ordem}]
 
-Obter uma ordem pelo seu identificador.
+Criar uma nova ordem de ativação.
 
 **Request Body**
 ```
-{
-    ordem(id: "e4c8c6b1-f771-4761-94a9-516aa42b52fb") {
+mutation {
+    criarOrdem(
+        ordem: {
+            canal: "site"
+            nome: "Nome do Cliente Final"
+            email: "cliente.final@email.com"
+            celular: "+55011912345678"
+            itens: [
+                {
+                    nome: "Sony PlayStation R$ 100,00",
+                    codigoUPC: "799366153351",
+                    codigoSerial: "8953418657",
+                    codigoBarras: "799366461600006374793695421177",
+                    valor: 100.00
+                },
+                {
+                    nome: "Sony PlayStation R$ 100,00",
+                    codigoUPC: "799366153351",
+                    codigoSerial: "8953418658",
+                    codigoBarras: "799366461600006374793695432288",
+                    valor: 100.00
+                }
+            ]
+        }
+    )
+    {
         _id
         canal
+        nome
         email
         celular
         status
-        produtos {
+        itens {
             _id
             codigoUPC
             codigoSerial
@@ -417,7 +382,7 @@ Obter uma ordem pelo seu identificador.
 }
 ```
 
-### ordem(id: id_ordem) [POST]
+### criarOrdem(ordem: params) [POST]
 
 + Request (application/json)
 
@@ -428,7 +393,7 @@ Obter uma ordem pelo seu identificador.
     + Body
 
             {
-                "query": "{ ordem(id: \"e4c8c6b1-f771-4761-94a9-516aa42b52fb\") { _id canal email celular status produtos { _id codigoUPC codigoSerial codigoBarras valor status } } }"
+                "query": "mutation { criarOrdem( ordem: { canal: \"site\" nome: \"Nome do Cliente Final\" email: \"cliente.final@email.com\" celular: \"+55011912345678\" itens: [ { nome: \"Sony PlayStation R$ 100,00\", codigoUPC: \"799366153351\", codigoSerial: \"8953418657\", codigoBarras: \"799366461600006374793695421177\", valor: 100.00 }, { nome: \"Sony PlayStation R$ 100,00\", codigoUPC: \"799366153351\", codigoSerial: \"8953418658\", codigoBarras: \"799366461600006374793695432288\", valor: 100.00 } ] } ) { _id canal nome email celular status itens { _id codigoUPC codigoSerial codigoBarras valor status } } }"
             }
 
 + Response 200 (application/json)
@@ -437,15 +402,17 @@ Obter uma ordem pelo seu identificador.
 
             {
                 "data": {
-                    "ordem": {
-                        "_id": "e4c8c6b1-f771-4761-94a9-516aa42b52fb",
+                    "criarOrdem": {
+                        "_id": "5ae15ae14a65b53fd56acbc5",
                         "canal": "site",
+                        "nome": "Nome do Cliente Final"
                         "email": "cliente.final@email.com",
                         "celular": "+55011912345678",
                         "status": "Em Processamento",
-                        "produtos": [
+                        "itens": [
                             {
-                                "_id": "de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406",
+                                "_id": "5ae15ae14a65b53fd56acbc6",
+                                "nome": "Sony PlayStation R$ 100,00",
                                 "codigoUPC": "799366153351",
                                 "codigoSerial": "8953418657",
                                 "codigoBarras": "799366461600006374793695421177",
@@ -453,7 +420,8 @@ Obter uma ordem pelo seu identificador.
                                 "status": "Em Processamento",
                             },
                             {
-                                "_id": "de8ca1bd-77f1-4f1f-a63c-0a1f6d8e3406",
+                                "_id": "5ae15b6b4a65b53fd56acbc8",
+                                "nome": "Sony PlayStation R$ 100,00",
                                 "codigoUPC": "799366153351",
                                 "codigoSerial": "8953418658",
                                 "codigoBarras": "799366461600006374793695432288",
@@ -464,3 +432,4 @@ Obter uma ordem pelo seu identificador.
                     }
                 }
             }
+
